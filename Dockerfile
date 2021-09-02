@@ -1,6 +1,14 @@
 FROM alpine:latest
 
-RUN apk add --no-cache chromium chromium-swiftshader
+RUN apk add --no-cache \
+   ca-certificates \
+   chromium \
+   chromium-swiftshader \
+   font-croscore \
+   font-noto-cjk \
+   font-noto-emoji \
+   ttf-liberation \
+   ttf-opensans
 
 # Add the chromium user:
 ARG CHROMIUM_USER_ID=1000
