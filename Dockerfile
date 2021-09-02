@@ -7,6 +7,7 @@ RUN apk add --no-cache \
    font-croscore \
    font-noto-cjk \
    font-noto-emoji \
+   ttf-dejavu \
    ttf-liberation \
    ttf-opensans
 
