@@ -1,40 +1,25 @@
-FROM debian:bullseye-slim AS runtime-dependencies
+FROM alpine:latest
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    chromium \
-    chromium-driver \
-    chromium-sandbox \
-    curl \
-    fonts-liberation \
-    fonts-roboto \
-    fonts-noto-color-emoji \
-    fonts-noto-cjk \
-    fonts-ipafont-gothic \
-    fonts-wqy-zenhei \
-    fonts-kacst \
-    fonts-thai-tlwg \
-    fonts-indic \
-    gconf-service \
-    locales \
-    lsb-release \
-    unzip \
-    wget \
-    xvfb \
- && apt-get -qq clean \
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk add --no-cache \
+   ca-certificates \
+   chromium \
+   chromium-swiftshader \
+   font-croscore \
+   font-noto-cjk \
+   font-noto-emoji \
+   ttf-dejavu \
+   ttf-liberation \
+   ttf-opensans
 
 # Add the chromium user:
-ARG CHROMIUM_USER_ID=999
-RUN groupadd -r chromium-user && useradd --uid ${CHROMIUM_USER_ID} -r -g chromium-user -G audio,video chromium-user \
-  && mkdir -p /home/chromium-user/Downloads \
-  && chown -R chromium-user:chromium-user /home/chromium-user
+ARG CHROMIUM_USER_ID=1000
+RUN getent passwd "${CHROMIUM_USER_ID}" || \
+  adduser -D -H -u ${CHROMIUM_USER_ID} -h /usr/src -g "Chromium User,,," chromium-user
 
 USER ${CHROMIUM_USER_ID}
 
 WORKDIR /workspaces/chromium
 
-ENTRYPOINT [ "/usr/bin/chromium" ]
+ENTRYPOINT [ "/usr/bin/chromium-browser" ]
 
 CMD [ "--headless", "--disable-gpu", "--no-sandbox", "--remote-debugging-port=9222", "--remote-debugging-address=0.0.0.0" ]
