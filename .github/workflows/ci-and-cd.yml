@@ -41,6 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: |
             icalialabs/chromium:${{ steps.variables.outputs.git-dasherized-branch }}
+            icalialabs/chromium:93.0.4577.82
             icalialabs/chromium:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
